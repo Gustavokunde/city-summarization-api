@@ -1,6 +1,7 @@
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
+import { Params } from "./interfaces/params";
 import { connectMongoDB } from "./repository/db";
 import { createParams } from "./repository/params/createParams";
 import { getParams } from "./repository/params/getParams";
@@ -14,14 +15,14 @@ connectMongoDB();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
-app.post("/params", (req, res) => {
-  const params = req.body;
-  const response = createParams(params);
+app.post("/params", async (req, res) => {
+  const params = req.body as unknown as Params;
+  const response = await createParams(params);
   return res.send(response);
 });
 
 app.put("/params", async (req, res) => {
-  const params = req.body;
+  const params = req.body as unknown as Params;
   const response = await updateParams(params);
   return res.send(response);
 });
